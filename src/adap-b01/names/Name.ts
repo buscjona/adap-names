@@ -19,6 +19,7 @@ export class Name {
     private components: string[] = [];
 
     /** Expects that all Name components are properly masked */
+    // @methodtype constructor-method
     constructor(other: string[], delimiter?: string) {
         // not optional -> no check required; string immutable -> shallow copy
         this.components = [...other];
@@ -34,6 +35,7 @@ export class Name {
      * Control characters are not escaped (creating a human-readable string)
      * Users can vary the delimiter character to be used
      */
+    // @methodtype conversion-method
     public asString(delimiter: string = this.delimiter): string {
         return this.components.join(delimiter);
     }
@@ -43,6 +45,7 @@ export class Name {
      * Machine-readable means that from a data string, a Name can be parsed back in
      * The control characters in the data string are the default characters
      */
+    // @methodtype conversion-method
     public asDataString(): string {
         let s: string = "";
         for (let i = 0; i < this.getNoComponents(); i++) {
@@ -64,23 +67,27 @@ export class Name {
         return s;
     }
 
+    // @methodtype get-method
     public getComponent(i: number): string {
-        this.indexCheck(i);
+        this.assertIndexInRange(i);
         return this.components[i];
     }
 
     /** Expects that new Name component c is properly masked */
+    // @methodtype set-method
     public setComponent(i: number, c: string): void {
-        this.indexCheck(i);
+        this.assertIndexInRange(i);
         this.components[i] = c;
     }
 
      /** Returns number of components in Name instance */
+     // @methodtype get-method
      public getNoComponents(): number {
         return this.components.length;
     }
 
     /** Expects that new Name component c is properly masked */
+    // @methodtype command-method
     public insert(i: number, c: string): void {
         // insert allows i === length
         if (i < 0 || i > this.getNoComponents()) {
@@ -90,16 +97,19 @@ export class Name {
     }
 
     /** Expects that new Name component c is properly masked */
+    // @methodtype command-method
     public append(c: string): void {
         this.components.push(c);
     }
 
+    // @methodtype command-method
     public remove(i: number): void {
-        this.indexCheck(i);
+        this.assertIndexInRange(i);
         this.components.splice(i, 1);
     }
 
-    private indexCheck(i: number): void {
+    // @methodtype assertion-method
+    private assertIndexInRange(i: number): void {
         if (i < 0 || i >= this.getNoComponents()) {
             throw new Error(`IndexError: Index Out of Range`);
         }
