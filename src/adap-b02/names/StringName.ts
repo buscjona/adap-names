@@ -7,8 +7,15 @@ export class StringName implements Name {
     protected name: string = "";
     protected noComponents: number = 0;
 
+    // @methodtype constructor-method
     constructor(source: string, delimiter?: string) {
-        throw new Error("needs implementation or deletion");
+        // source not optional -> no check required
+        this.name = source;
+        if (delimiter != undefined) {
+            this.delimiter = delimiter;
+        } else {
+            this.delimiter = DEFAULT_DELIMITER;
+        }
     }
 
     public asString(delimiter: string = this.delimiter): string {

@@ -6,52 +6,101 @@ export class StringArrayName implements Name {
     protected delimiter: string = DEFAULT_DELIMITER;
     protected components: string[] = [];
 
+    // @methodtype constructor-method
     constructor(source: string[], delimiter?: string) {
-        throw new Error("needs implementation or deletion");
+        this.components = [...source];
+        if (delimiter != undefined) {
+            this.delimiter = delimiter;
+        } else {
+            this.delimiter = DEFAULT_DELIMITER;
+        }
     }
 
+    // @methodtype conversion-method
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        return this.components.join(delimiter);
     }
 
+    // @methodtype conversion-method
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+        let s: string = "";
+        for (let i = 0; i < this.getNoComponents(); i++) {
+            let comp = this.getComponent(i);
+            let temp = "";
+            for (let char of comp) {
+                // escape char has to be escaped as well, i.e. \b would result in linebreak
+                if (char === DEFAULT_DELIMITER || char === ESCAPE_CHARACTER) {
+                    temp += ESCAPE_CHARACTER;
+                }
+                temp += char;
+            }
+            s += temp;
+            // No delimiter after last comp
+            if (i < this.getNoComponents() - 1) {
+                s += DEFAULT_DELIMITER;
+            }
+        }
+        return s;
     }
 
+    // @methodtype get-method
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return this.delimiter;
     }
 
+    // @methodtype boolean-query-method
     public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return this.getNoComponents() === 0;
     }
 
+    // @methodtype get-method
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.components.length;
     }
 
+    // @methodtype get-method
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        return this.components[i];
     }
 
+    // @methodtype set-method
     public setComponent(i: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        this.components[i] = c;
     }
 
+    // @methodtype command-method
     public insert(i: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+        // insert allows i === length
+        if (i < 0 || i > this.getNoComponents()) {
+            throw new Error(`IndexError: Index Out of Range`);
+        }
+        this.components.splice(i, 0, c);
     }
 
+    // @methodtype command-method
     public append(c: string): void {
-        throw new Error("needs implementation or deletion");
+        this.components.push(c);
     }
 
+    // @methodtype command-method
     public remove(i: number): void {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        this.components.splice(i, 1);
     }
 
+    // @methodtype command-method
     public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        for (let i = 0; i < other.getNoComponents(); i++) {
+            this.components.push(other.getComponent(i));
+        }
     }
 
+    // @methodtype assertion-method
+    private assertIndexInRange(i: number): void {
+        if (i < 0 || i >= this.getNoComponents()) {
+            throw new Error(`IndexError: Index Out of Range`);
+        }
+    }
 }
