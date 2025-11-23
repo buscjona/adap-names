@@ -6,64 +6,46 @@ export class StringArrayName extends AbstractName {
 
     protected components: string[] = [];
 
+    // @methodtype constructor-method
     constructor(source: string[], delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+        super(delimiter);
+        this.components = [...source];
     }
 
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
+    // @methodtype get-method
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.components.length;
     }
 
+    // @methodtype get-method
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i)
+        return this.components[i];
     }
 
+    // @methodtype set-method
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        this.components[i] = c;
     }
 
+    // @methodtype command-method
     public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        // insert allows i === length
+        if (i < 0 || i > this.getNoComponents()) {
+            throw new Error(`IndexError: Index Out of Range`);
+        }
+        this.components.splice(i, 0, c);
     }
 
+    // @methodtype command-method
     public append(c: string) {
-        throw new Error("needs implementation or deletion");
+        this.components.push(c);
     }
 
+    // @methodtype command-method
     public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        this.components.splice(i, 1);
     }
 }

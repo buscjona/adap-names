@@ -7,65 +7,58 @@ export class StringName extends AbstractName {
     protected name: string = "";
     protected noComponents: number = 0;
 
+    // @methodtype constructor-method
     constructor(source: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+        super(delimiter);
+        this.name = source;
     }
 
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
+    // @methodtype get-method
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.noComponents;
     }
 
+    // @methodtype get-method
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+         this.assertIndexInRange(i);
+        return this.name.split(this.delimiter)[i];
     }
 
+    // @methodtype set-method
     public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        let temp: string[] = this.name.split(this.delimiter);
+        temp[i] = c;
+        this.name = temp.join(this.delimiter);
     }
 
+    // @methodtype command-method
     public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+        // insert allows i === length
+        if (i < 0 || i > this.noComponents) {
+            throw new Error(`IndexError: Index Out of Range`);
+        }
+        let temp: string[] = this.name.split(this.delimiter);
+        temp.splice(i, 0, c);
+        this.name = temp.join(this.delimiter);
+        // We added an element so noComponents goes up by one
+        this.noComponents += 1;
     }
 
+    // @methodtype command-method
     public append(c: string) {
-        throw new Error("needs implementation or deletion");
+        let temp: string[] = this.name.split(this.delimiter);
+        temp.push(c);
+        this.name = temp.join(this.delimiter);
+        this.noComponents += 1;
     }
 
+    // @methodtype command-method
     public remove(i: number) {
-        throw new Error("needs implementation or deletion");
+        this.assertIndexInRange(i);
+        let temp: string[] = this.name.split(this.delimiter);
+        temp.splice(i, 1);
+        this.name = temp.join(this.delimiter);
+        this.noComponents -= 1; 
     }
-
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
-
 }
