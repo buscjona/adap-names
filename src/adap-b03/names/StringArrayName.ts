@@ -12,6 +12,11 @@ export class StringArrayName extends AbstractName {
         this.components = [...source];
     }
 
+    // @methodtype command-method
+    public clone(): Name {
+        return new StringArrayName([...this.components], this.delimiter);
+    }
+
     // @methodtype get-method
     public getNoComponents(): number {
         return this.components.length;

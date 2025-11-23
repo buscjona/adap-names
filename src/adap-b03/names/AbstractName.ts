@@ -6,9 +6,13 @@ export abstract class AbstractName implements Name {
     protected delimiter: string = DEFAULT_DELIMITER;
 
     constructor(delimiter: string = DEFAULT_DELIMITER) {
+        if (delimiter.length !== 1) {
+            throw new Error("Delimiter must be a single character");
+        }
         this.delimiter = delimiter;
     }
 
+    // @methodtype command-method
     public abstract clone(): Name;
 
     // @methodtype conversion-method

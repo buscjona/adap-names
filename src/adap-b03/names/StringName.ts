@@ -11,6 +11,12 @@ export class StringName extends AbstractName {
     constructor(source: string, delimiter?: string) {
         super(delimiter);
         this.name = source;
+        this.noComponents = this.name.split(this.delimiter).length;
+    }
+
+    // @methodtype command-method
+    public clone(): Name {
+        return new StringName(this.name, this.delimiter);
     }
 
     // @methodtype get-method
@@ -20,7 +26,7 @@ export class StringName extends AbstractName {
 
     // @methodtype get-method
     public getComponent(i: number): string {
-         this.assertIndexInRange(i);
+        this.assertIndexInRange(i);
         return this.name.split(this.delimiter)[i];
     }
 
@@ -59,6 +65,6 @@ export class StringName extends AbstractName {
         let temp: string[] = this.name.split(this.delimiter);
         temp.splice(i, 1);
         this.name = temp.join(this.delimiter);
-        this.noComponents -= 1; 
+        this.noComponents -= 1;
     }
 }
