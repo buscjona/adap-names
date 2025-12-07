@@ -5,6 +5,7 @@ import { Directory } from "./Directory";
 export class RootNode extends Directory {
 
     protected static ROOT_NODE: RootNode = new RootNode();
+    protected isRootNode: boolean = true;
 
     public static getRootNode() {
         return this.ROOT_NODE;
