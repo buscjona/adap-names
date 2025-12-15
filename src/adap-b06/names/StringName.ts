@@ -5,41 +5,39 @@ import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { MethodFailedException } from "../common/MethodFailedException";
 import { InvalidStateException } from "../common/InvalidStateException";
 
-export class StringArrayName extends AbstractName {
+export class StringName extends AbstractName {
 
-    protected components: string[] = [];
+    protected name: string = "";
+    protected noComponents: number = 0;
 
     // @methodtype constructor-method
-    constructor(source: string[], delimiter?: string) {
+    constructor(source: string, delimiter?: string) {
         super(delimiter);
-        if (!Array.isArray(source)) {
-            throw new IllegalArgumentException("TypeError: argument must be an array")
+        // precondition
+        if (typeof source !== "string") {
+            throw new IllegalArgumentException("TypeError: source must be a string");
         }
-        for (let component of source) {
-            if (typeof component !== "string") {
-                throw new IllegalArgumentException("TypeError: components must be a string")
-            }
-        }
-        this.components = [...source];
+        this.name = source;
+        this.noComponents = this.name.split(this.delimiter).length;
         // class invariant checks no longer necessary, since no mutation
     }
 
     // @methodtype command-method
     public clone(): Name {
         // class invariant checks no longer necessary, since no mutation
-        return new StringArrayName([...this.components], this.delimiter);
+        return new StringName(this.name, this.delimiter);
     }
 
     // @methodtype get-method
     public getNoComponents(): number {
-        return this.components.length;
+        return this.noComponents;
     }
 
     // @methodtype get-method
     public getComponent(i: number): string {
         // Precondition
         this.assertIndexIsValidAsPrecondition(i);
-        const result = this.components[i];
+        const result = this.name.split(this.delimiter)[i];
         // postcondition
         this.assertReturnIsValidStringAsPostcondition(result);
         // class invariant checks no longer necessary, since no mutation
@@ -52,12 +50,12 @@ export class StringArrayName extends AbstractName {
         this.assertIndexIsValidAsPrecondition(i);
         // Also can be used as a precondition check
         this.assertReturnIsValidStringAsPostcondition(c);
-        const copy = [...this.components];
-        copy[i] = c;
-        const result = new StringArrayName(copy, this.delimiter);
+        const copy = this.name;
+        let temp: string[] = copy.split(this.delimiter);
+        temp[i] = c;
+        const result = new StringName(temp.join(this.delimiter), this.delimiter);
         // postcondition
         this.assertSetSuccessfullAsPostCondition(i, c, result);
-        // class invariant checks no longer necessary, since no mutation
         return result;
     }
 
@@ -69,14 +67,15 @@ export class StringArrayName extends AbstractName {
         }
         // Precondition
         // insert allows i === length
-        if (i < 0 || i > this.getNoComponents()) {
-            throw new IllegalArgumentException("IndexError: Index Out of Range");
+        if (i < 0 || i > this.noComponents) {
+            throw new Error("IndexError: Index Out of Range");
         }
         // Also can be used as a precondition check
         this.assertReturnIsValidStringAsPostcondition(c);
-        const copy = [...this.components];
-        copy.splice(i, 0, c);
-        const result = new StringArrayName(copy, this.delimiter);
+        const copy = this.name;
+        let temp: string[] = copy.split(this.delimiter);
+        temp.splice(i, 0, c);
+        const result = new StringName(temp.join(this.delimiter), this.delimiter);
         // postcondition
         this.assertInsertSuccessfullAsPostCondition(i, c, result);
         // class invariant checks no longer necessary, since no mutation
@@ -87,10 +86,11 @@ export class StringArrayName extends AbstractName {
     public append(c: string): Name {
         // Also can be used as a precondition check
         this.assertReturnIsValidStringAsPostcondition(c);
-        const copy = [...this.components];
-        copy.push(c);
-        const result = new StringArrayName(copy, this.delimiter);
-        const i = this.getNoComponents();
+        const copy = this.name;
+        const i = this.noComponents;
+        let temp: string[] = copy.split(this.delimiter);
+        temp.push(c);
+        const result = new StringName(temp.join(this.delimiter), this.delimiter);
         // postcondition
         this.assertAppendSuccessfullAsPostCondition(i, c, result);
         // class invariant checks no longer necessary, since no mutation
@@ -101,19 +101,19 @@ export class StringArrayName extends AbstractName {
     public remove(i: number): Name {
         // Precondition
         this.assertIndexIsValidAsPrecondition(i);
-        const copy = [...this.components];
-        copy.splice(i, 1);
-        const result = new StringArrayName(copy, this.delimiter);
+        const copy = this.name;
+        let temp: string[] = copy.split(this.delimiter);
+        temp.splice(i, 1);
+        const result = new StringName(temp.join(this.delimiter), this.delimiter);
         // postcondition
         this.assertRemoveSuccessfullAsPostCondition(result);
-        // class invariant checks no longer necessary, since no mutation
         // class invariant checks no longer necessary, since no mutation
         return result;
     }
 
     public assertSetSuccessfullAsPostCondition(i: number, c: string, result: Name): void {
         if (result.getComponent(i) !== c) {
-            throw new MethodFailedException("set component failed")
+            throw new MethodFailedException("set component failed");
         }
     }
 
