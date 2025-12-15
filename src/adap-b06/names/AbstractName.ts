@@ -227,15 +227,4 @@ export abstract class AbstractName implements Name {
             throw new IllegalArgumentException("IndexError: Index Out of Range");
         }
     }
-
-    // TODO entfernen nach StringName und StringArrayName Update
-    // @methodtype command-method
-    public restoreFrom(old: Name): void {
-        while (this.getNoComponents() > 0) {
-            this.remove(this.getNoComponents() - 1);
-        }
-        for (let i = 0; i < old.getNoComponents(); i++) {
-            this.append(old.getComponent(i));
-        }
-    }
 }
