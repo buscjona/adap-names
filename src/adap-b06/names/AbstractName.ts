@@ -140,13 +140,13 @@ export abstract class AbstractName implements Name {
     // @methodtype get-method
     abstract getComponent(i: number): string;
     // @methodtype set-method
-    abstract setComponent(i: number, c: string): void;
+    abstract setComponent(i: number, c: string): Name;
     // @methodtype command-method
-    abstract insert(i: number, c: string): void;
+    abstract insert(i: number, c: string): Name;
     // @methodtype command-method
-    abstract append(c: string): void;
+    abstract append(c: string): Name;
     // @methodtype command-method
-    abstract remove(i: number): void;
+    abstract remove(i: number): Name;
     // Minimal inheritance interface end
 
     // @methodtype command-method
@@ -228,6 +228,7 @@ export abstract class AbstractName implements Name {
         }
     }
 
+    // TODO entfernen nach StringName und StringArrayName Update
     // @methodtype command-method
     public restoreFrom(old: Name): void {
         while (this.getNoComponents() > 0) {
